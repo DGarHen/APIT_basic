@@ -1,4 +1,4 @@
-package com.api.rest;
+package com.app.actions;
 
 import io.cucumber.cienvironment.internal.com.eclipsesource.json.JsonArray;
 import io.cucumber.cienvironment.internal.com.eclipsesource.json.JsonObject;
@@ -16,11 +16,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-public class WebServiceConsumer {
+public class RestActions {
     private Response response;
     private ValidatableResponse json;
     private RequestSpecification request = given();
@@ -29,7 +28,7 @@ public class WebServiceConsumer {
     private JsonArray requestBodyArray = new JsonArray();
 
     public void setEndpoint(String proEndpoint) {
-        this.endpoint = "postman-echo.com/"+proEndpoint;
+        this.endpoint = "https://postman-echo.com/"+proEndpoint;
     }
 
     public void setParams(String tag, Object value) {
@@ -252,5 +251,9 @@ public class WebServiceConsumer {
 
     public <T> List<T> getExtractPaymentTemplateFeeList(String data, Class<T> genericType) {
         return json.extract().jsonPath(new JsonPathConfig(JsonPathConfig.NumberReturnType.DOUBLE)).getList(data, genericType);
+    }
+
+    public void restAssuredExample() {
+        given().param("user","Diego").param("text","test").header("content-type","application/json").header("postman-token", "3eb89b06-9aaf-4392-b92a-995784b9d054").header("host", "postman-echo.com").when().get("https://postman-echo.com/get").then().body("args.user",equalTo("Diego"));
     }
 }
